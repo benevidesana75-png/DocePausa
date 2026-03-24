@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ritual de Pausa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --terracota: #C4674A;
+    --terracota-light: #D4846A;
+    --terracota-pale: #F2E0D8;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --cream: #FAF5EF;
+    --warm-brown: #5C3D2E;
+    --text: #3A2419;
+    --text-soft: #7A5A4A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  input[type="radio"] { display: none; }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 24px;
+    background: rgba(250,245,239,0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(196,103,74,0.15);
+  }
+  .nav label {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--terracota-pale);
+    border: 1.5px solid var(--terracota);
+    cursor: pointer;
+    display: block;
+    transition: all 0.3s;
+  }
+  #p1:checked ~ .nav label[for="p1"],
+  #p2:checked ~ .nav label[for="p2"],
+  #p3:checked ~ .nav label[for="p3"],
+  #p4:checked ~ .nav label[for="p4"],
+  #p5:checked ~ .nav label[for="p5"] {
+    background: var(--terracota);
+    transform: scale(1.4);
+  }
+
+  /* SLIDER */
+  .slider-wrapper { width: 100vw; height: 100vh; overflow: hidden; }
+  .slider-track {
+    display: flex;
+    width: 500%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.77,0,0.175,1);
+  }
+  #p1:checked ~ .slider-wrapper .slider-track { transform: translateX(0%); }
+  #p2:checked ~ .slider-wrapper .slider-track { transform: translateX(-20%); }
+  #p3:checked ~ .slider-wrapper .slider-track { transform: translateX(-40%); }
+  #p4:checked ~ .slider-wrapper .slider-track { transform: translateX(-60%); }
+  #p5:checked ~ .slider-wrapper .slider-track { transform: translateX(-80%); }
+
+  .page {
+    width: 20%;
+    flex-shrink: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 32px 52px;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  /* COVER */
+  .cover { background: var(--warm-brown); text-align: center; }
+  .cover::before {
+    content:''; position:absolute;
+    width:280px; height:280px; border-radius:50%;
+    background:var(--gold); opacity:0.07;
+    top:-80px; right:-60px; pointer-events:none;
+  }
+  .cover::after {
+    content:''; position:absolute;
+    width:200px; height:200px; border-radius:50%;
+    background:var(--terracota); opacity:0.1;
+    bottom:-60px; left:-40px; pointer-events:none;
+  }
+  .cover-eyebrow {
+    font-size:10px; letter-spacing:4px; text-transform:uppercase;
+    color:var(--gold-light); font-weight:300; margin-bottom:18px;
+  }
+  .cover-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(44px,9vw,68px); font-weight:300;
+    color:var(--cream); line-height:1.1; margin-bottom:16px;
+  }
+  .cover-title em { font-style:italic; color:var(--gold-light); }
+  .cover-line { width:40px; height:1px; background:var(--gold); margin:18px auto; }
+  .cover-sub {
+    font-size:13px; font-weight:300; letter-spacing:0.5px;
+    color:rgba(250,245,239,0.6); max-width:220px; line-height:1.8; margin-bottom:32px;
+  }
+  .cover-icon { font-size:34px; margin-bottom:24px; display:block; }
+
+  /* RITUAL PAGES */
+  .ritual-page { background: var(--cream); }
+  .ritual-page.warm { background: #F7EDE6; }
+  .ritual-page.dark { background: var(--warm-brown); }
+
+  .page-label {
+    font-size:10px; letter-spacing:4px; text-transform:uppercase;
+    color:var(--terracota); font-weight:500; margin-bottom:8px;
+    align-self:flex-start; max-width:340px; width:100%;
+  }
+  .dark .page-label { color:var(--gold-light); }
+
+  .ritual-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(28px,5.5vw,46px); font-weight:300;
+    color:var(--warm-brown); line-height:1.15; margin-bottom:4px;
+    align-self:flex-start; max-width:340px; width:100%;
+  }
+  .ritual-title em { font-style:italic; color:var(--terracota); }
+  .dark .ritual-title { color:var(--cream); }
+  .dark .ritual-title em { color:var(--gold-light); }
+
+  .ritual-subtitle {
+    font-size:12px; color:var(--text-soft); font-weight:300;
+    letter-spacing:0.3px; margin-bottom:20px;
+    align-self:flex-start; max-width:340px; width:100%;
+  }
+  .dark .ritual-subtitle { color:rgba(250,245,239,0.5); }
+
+  .divider { width:28px; height:1.5px; background:var(--gold); margin-bottom:20px; align-self:flex-start; }
+
+  .steps { width:100%; max-width:340px; }
+  .step { display:flex; align-items:flex-start; gap:14px; margin-bottom:14px; }
+  .step-num {
+    min-width:26px; height:26px; border-radius:50%;
+    background:var(--terracota-pale); border:1px solid var(--terracota-light);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:500; color:var(--terracota); margin-top:2px; flex-shrink:0;
+  }
+  .dark .step-num { background:rgba(201,168,76,0.12); border-color:var(--gold); color:var(--gold-light); }
+  .step-text { font-size:14px; font-weight:400; color:var(--text); line-height:1.5; }
+  .step-text span { display:block; font-size:11px; color:var(--text-soft); margin-top:1px; font-weight:300; }
+  .dark .step-text { color:var(--cream); }
+  .dark .step-text span { color:rgba(250,245,239,0.5); }
+
+  .closing {
+    margin-top:18px; padding:14px 18px;
+    border-left:2px solid var(--gold);
+    background:rgba(201,168,76,0.07);
+    border-radius:0 6px 6px 0;
+    max-width:340px; width:100%;
+  }
+  .closing p {
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic; font-size:15px;
+    color:var(--warm-brown); line-height:1.6;
+  }
+  .dark .closing { background:rgba(201,168,76,0.08); }
+  .dark .closing p { color:var(--cream); }
+
+  .btn-next {
+    margin-top:20px; padding:10px 26px;
+    border:1.5px solid var(--terracota); background:transparent;
+    color:var(--terracota); font-family:'Jost',sans-serif;
+    font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    cursor:pointer; border-radius:40px; display:inline-block;
+    text-decoration:none; transition:all 0.3s;
+  }
+  .btn-next:hover { background:var(--terracota); color:var(--cream); }
+  .dark .btn-next { border-color:var(--gold); color:var(--gold-light); }
+  .dark .btn-next:hover { background:var(--gold); color:var(--warm-brown); }
+
+  /* FINAL */
+  .final-page { background:var(--terracota-pale); text-align:center; }
+  .final-title {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(26px,5vw,42px); font-weight:300; font-style:italic;
+    color:var(--warm-brown); line-height:1.3; max-width:280px; margin-bottom:24px;
+  }
+  .final-phrases { max-width:300px; width:100%; }
+  .phrase {
+    font-family:'Cormorant Garamond',serif;
+    font-size:17px; font-style:italic; color:var(--text-soft);
+    padding:13px 0; border-bottom:1px solid rgba(196,103,74,0.2);
+  }
+  .phrase:last-child { border-bottom:none; }
+  .final-mark { margin-top:24px; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--terracota); font-weight:500; }
+
+  .hint {
+    position:absolute; bottom:20px;
+    font-size:10px; letter-spacing:3px; text-transform:uppercase;
+    color:rgba(250,245,239,0.3);
+  }
+</style>
+</head>
+<body>
+
+<input type="radio" name="page" id="p1" checked>
+<input type="radio" name="page" id="p2">
+<input type="radio" name="page" id="p3">
+<input type="radio" name="page" id="p4">
+<input type="radio" name="page" id="p5">
+
+<nav class="nav">
+  <label for="p1"></label>
+  <label for="p2"></label>
+  <label for="p3"></label>
+  <label for="p4"></label>
+  <label for="p5"></label>
+</nav>
+
+<div class="slider-wrapper">
+  <div class="slider-track">
+
+    <!-- CAPA -->
+    <div class="page cover">
+      <span class="cover-icon">🌿</span>
+      <p class="cover-eyebrow">Box Ritual de Pausa</p>
+      <h1 class="cover-title">Seu guia de<br><em>ritual</em></h1>
+      <div class="cover-line"></div>
+      <p class="cover-sub">Três rituais criados para te ajudar a desacelerar de verdade.</p>
+      <label for="p2" class="btn-next" style="border-color:var(--gold-light);color:var(--gold-light);">Começar</label>
+      <p class="hint">clique para avançar</p>
+    </div>
+
+    <!-- RITUAL 01 -->
+    <div class="page ritual-page warm">
+      <p class="page-label">Ritual 01</p>
+      <h2 class="ritual-title">Seu momento<br>de <em>pausa</em></h2>
+      <p class="ritual-subtitle">Quando você quer se reconectar de verdade</p>
+      <div class="divider"></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><p class="step-text">Acenda a vela<span>Deixe o aroma sinalizar que o dia de trabalho acabou</span></p></div>
+        <div class="step"><div class="step-num">2</div><p class="step-text">Coloque a playlist<span>Acesse pelo QR Code na caixa</span></p></div>
+        <div class="step"><div class="step-num">3</div><p class="step-text">Respire fundo três vezes<span>Devagar. Sem pressa.</span></p></div>
+        <div class="step"><div class="step-num">4</div><p class="step-text">Prepare o escalda-pés<span>Sinta o calor chegar e o corpo soltar</span></p></div>
+        <div class="step"><div class="step-num">5</div><p class="step-text">Foque nas sensações<span>Temperatura, aroma, textura — só isso importa agora</span></p></div>
+        <div class="step"><div class="step-num">6</div><p class="step-text">Deixe os pensamentos passarem<span>Não precisa resolver nada. Só sentir.</span></p></div>
+      </div>
+      <div class="closing"><p>"Esse momento não precisa ser perfeito. Só precisa ser seu."</p></div>
+      <label for="p3" class="btn-next">Próximo ritual</label>
+    </div>
+
+    <!-- RITUAL 02 -->
+    <div class="page ritual-page">
+      <p class="page-label">Ritual 02</p>
+      <h2 class="ritual-title">Pausa de<br><em>5 minutos</em></h2>
+      <p class="ritual-subtitle">Para quando você "não tem tempo" — mas precisa muito</p>
+      <div class="divider"></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><p class="step-text">Acenda a vela<span>Só isso já muda o ambiente</span></p></div>
+        <div class="step"><div class="step-num">2</div><p class="step-text">Feche os olhos<span>Afaste o visual por um momento</span></p></div>
+        <div class="step"><div class="step-num">3</div><p class="step-text">Respire lentamente<span>Inspire por 4 segundos, expire por 6</span></p></div>
+        <div class="step"><div class="step-num">4</div><p class="step-text">Solte o corpo<span>Ombros, mandíbula, mãos — tudo pode relaxar agora</span></p></div>
+      </div>
+      <div class="closing"><p>"5 minutos já mudam o seu estado. Você merece esses 5 minutos."</p></div>
+      <label for="p4" class="btn-next">Próximo ritual</label>
+    </div>
+
+    <!-- RITUAL 03 -->
+    <div class="page ritual-page dark">
+      <p class="page-label">Ritual 03</p>
+      <h2 class="ritual-title">Quando a mente<br>não <em>desacelera</em></h2>
+      <p class="ritual-subtitle">Para os dias em que a ansiedade fala mais alto</p>
+      <div class="divider"></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><p class="step-text">Observe sua respiração<span>Não tente mudar. Só observe.</span></p></div>
+        <div class="step"><div class="step-num">2</div><p class="step-text">Sinta os pés na água<span>O calor é real. Você está aqui.</span></p></div>
+        <div class="step"><div class="step-num">3</div><p class="step-text">Nomeie 3 coisas que sente no corpo<span>Calor, peso, formigamento — qualquer sensação conta</span></p></div>
+        <div class="step"><div class="step-num">4</div><p class="step-text">Volte para o presente<span>Esse momento. Esse aroma. Essa água.</span></p></div>
+      </div>
+      <div class="closing"><p>"Você não precisa resolver tudo agora. Só precisa estar aqui."</p></div>
+      <label for="p5" class="btn-next">Encerrar</label>
+    </div>
+
+    <!-- FINAL -->
+    <div class="page final-page">
+      <h2 class="final-title">Você merece esse tempo.</h2>
+      <div class="final-phrases">
+        <p class="phrase">Descansar também é produtivo.</p>
+        <p class="phrase">Pausar não é perder tempo.</p>
+        <p class="phrase">Cuidar de você é o começo de tudo.</p>
+      </div>
+      <p class="final-mark">Box Ritual de Pausa 🌿</p>
+      <label for="p1" class="btn-next" style="margin-top:20px;">Recomeçar</label>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
